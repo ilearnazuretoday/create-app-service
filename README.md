@@ -6,5 +6,9 @@
 
 ![App Service SKU](app-service-sku.png)
 
-## Other
+## HTML Demo
+
+
+
+## API Demo
 
