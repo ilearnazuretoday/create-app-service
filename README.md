@@ -2,9 +2,9 @@
 
 ## Resources
 
-::: html
-<iframe src="https://www.xmind.net/m/eyj7CX/#"></iframe>
-::: html
+### Choose App Service SKU plan
+
+
 
 ## Other
 
