@@ -48,8 +48,7 @@ This demo is a sample html page served from nginx server running in a docker con
 
 To setup our testing infrastructure, we will take advantage of the fact that Azure Cloud Shell comes with pre-installed terraform.
 
-You don't need to be familiar with terraform, all commands will be provided, but remember **always check scripts from internet before executing**. All scripts are part of the learning repository here:
-TODO: repository link
+You don't need to be familiar with terraform, all commands will be provided, but remember **always check scripts from internet before executing**. All scripts are part of the learning repository [here](https://github.com/ilearnazuretoday/create-app-service/tree/main/terraform)
 
 ### Setup docker container
 
@@ -63,11 +62,11 @@ cd create-app-service/terraform
 # Initialize terraform with Azure Provider
 terraform init
 
-# Login to container registry
-az acr login --name acrlearningazure
+# Validate terraform scripts
+terraform plan
 
-# Build image locally
-docker build -t acrlearningazure.azurecr.io/nginx-demo:1.0 .
+# Create infrastructure, confirm with "yes"
+terraform apply
 
 # Finally push image to registry
 docker push acrlearningazure.azurecr.io/nginx-demo:1.0

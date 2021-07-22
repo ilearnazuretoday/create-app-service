@@ -5,3 +5,11 @@ output "app_service_name" {
 output "app_service_default_hostname" {
   value = "https://${azurerm_app_service.main.default_site_hostname}"
 }
+
+output "acr_login" {
+  value = azurerm_container_registry.acr.admin_username
+}
+
+output "acr_password" {
+  value = azurerm_container_registry.acr.admin_password
+}
