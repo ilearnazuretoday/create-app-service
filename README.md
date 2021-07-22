@@ -2,7 +2,17 @@
 
 Azure App Service is a fully managed service for building, deploying, and scaling your web apps, web APIs and other service side workloads. App service is azure PaaS offering, PaaS stands for **Platform as a Service**.
 
-[Heroku](https://www.heroku.com/) was the first company to introduce PaaS-like offering.
+## PaaS Providers
+
+There are other PaaS providers than Azure, each major Cloud Provider have their offering:
+
+- [GCP: Google App Engine](https://cloud.google.com/appengine/)
+- [AWS: Elastic Beanstalk](https://aws.amazon.com/elasticbeanstalk/)
+
+There are also interesting smaller PaaS providers
+
+- [Heroku](https://www.heroku.com/) was the first company to introduce PaaS-like offering
+- [Rancher Epinio](https://epinio.io/) still in experimental phase but very promising PaaS offering
 
 ## What are the benefits of PaaS?
 
