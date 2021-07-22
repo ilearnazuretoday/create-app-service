@@ -10,7 +10,7 @@ variable "environment" {
 }
 
 variable "project_abbrev" {
-  default     = "learn-paas"
+  default     = "learnpaas"
   type        = string
   description = "Short name of the project"
 }
