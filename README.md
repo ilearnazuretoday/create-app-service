@@ -84,7 +84,7 @@ export RG_NAME=$(terraform output --raw resource_group)
 # Capture ACR name output from terraform into a variable
 export ACR_NAME=$(terraform output --raw acr_name)
 
-Capture app service name into a variable
+# Capture app service name into a variable
 export APP_NAME=$(terraform output --raw app_service_name)
 
 # Obtain user name for our ACR
@@ -108,9 +108,13 @@ az acr build --image nginx-demo:1.0 \
 
 ### Set newly pushed image for our App Service
 
-az webapp config container set --name <app-name> --resource-group <group-name> --docker-custom-image-name <image-name> --docker-registry-server-url <private-repo-url> --docker-registry-server-user <username> --docker-registry-server-password <password>
+TODO: Finish this command
+
+
+```bash
+az webapp config container set --name $APP_NAME \
+    --resource-group $RG_NAME \
+    --docker-custom-image-name nginx-demo:1.0 --docker-registry-server-url <private-repo-url> --docker-registry-server-user <username> --docker-registry-server-password <password>
 ```
 
-Remember to retag image with new version. For now this will be manual process.
-
-## Resources
+## Conclusion
