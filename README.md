@@ -54,6 +54,26 @@ TODO: repository link
 ### Setup docker container
 
 ```bash
+# Clone the exercise repository
+git clone https://github.com/ilearnazuretoday/create-app-service
+
+# Switch to right directory
+cd create-app-service/terraform
+
+# Initialize terraform with Azure Provider
+terraform init
+
+# Login to container registry
+az acr login --name acrlearningazure
+
+# Build image locally
+docker build -t acrlearningazure.azurecr.io/nginx-demo:1.0 .
+
+# Finally push image to registry
+docker push acrlearningazure.azurecr.io/nginx-demo:1.0
+```
+
+```bash
 # Login to Azure
 az login
 
