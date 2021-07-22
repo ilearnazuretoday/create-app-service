@@ -11,6 +11,6 @@ output "acr_login" {
 }
 
 output "acr_password" {
-  sensitive = true
+  sensitive = false
   value = azurerm_container_registry.acr.admin_password
 }
