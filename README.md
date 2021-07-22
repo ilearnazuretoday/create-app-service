@@ -40,15 +40,19 @@ Since there is no good graphical representation helping us choose between SKUs (
 
 ![App Service SKU](/media/app-service-sku.png)
 
-## HTML Demo
+## Demo
 
-This demo is a sample html page served from nginx server running in a docker container.
+We are going to deploy Azure infrastructure and use App Service with Azure Container Registry to deploy a sample web app running in a docker container.
 
 ### Infrastructure
 
 To setup our testing infrastructure, we will take advantage of the fact that Azure Cloud Shell comes with pre-installed terraform.
 
-You don't need to be familiar with terraform, all commands will be provided, but remember **always check scripts from internet before executing**. All scripts are part of the learning repository [here](https://github.com/ilearnazuretoday/create-app-service/tree/main/terraform)
+You don't need to be familiar with terraform, all commands will be provided, but remember **always check scripts from internet before executing**. All scripts are part of the learning repository [here](https://github.com/ilearnazuretoday/create-app-service/tree/main/terraform).
+
+Login to Azure portal and select Cloud Shell. Follow [this tutorial](https://docs.microsoft.com/en-us/azure/cloud-shell/overview) to activate cloud shell if you are login for the first time on a fresh account.
+
+Once you are in cloud shell, make sure to select *bash* environment and follow the steps below.
 
 ```bash
 # Clone the exercise repository
@@ -75,7 +79,7 @@ The above commands should create our Azure infrastructure and. Go ahead and copy
 
 From here we have various options to play around with deploying a sample html page from the nginx-demo folder, replacing the app service container with antoher one, setting up CI/CD pipeline etc. If you are interested, follow along with the instructions.
 
-#### Retrieve login details to our Azure Container Registry so we can push an image with the sample web app
+Retrieve login details to our Azure Container Registry so we can push an image with the sample web app
 
 ```bash
 # Capture resource group name output from terraform into a variable
@@ -87,14 +91,16 @@ export ACR_NAME=$(terraform output --raw acr_name)
 # Capture app service name into a variable
 export APP_NAME=$(terraform output --raw app_service_name)
 
-# Obtain user name for our ACR
+# Obtain user name for the ACR
 export ACR_USERNAME=$(az acr credential show --resource-group $RG_NAME_ --name $ACR_NAME --query username)
 
-# Obtain password for our ACR
-export ACR_USERNAME=$(az acr credential show --resource-group $RG_NAME_ --name $ACR_NAME --query passwords[0].value)
+# Obtain password for the ACR
+export ACR_PASSWORD=$(az acr credential show --resource-group $RG_NAME_ --name $ACR_NAME --query passwords[0].value)
 ```
 
 #### Build image locally form Azure Cloud shell
+
+Since docker daemon is not running in the cloud shell VM, we have to use *az acr build* command to build an image and deploy it to ACR.
 
 ```bash
 # Navigate to folder with demo app
@@ -106,15 +112,34 @@ az acr build --image nginx-demo:1.0 \
     --file Dockerfile .
 ```
 
-### Set newly pushed image for our App Service
+#### Set newly pushed image for our App Service
 
-TODO: Finish this command
-
+No we can set the image for our App Service. Please note that all those actions are done in an "imperative" way for educational purposes. In real life scenarios CI/CD pipelines would be setup to handle the flow of change and updates
 
 ```bash
 az webapp config container set --name $APP_NAME \
     --resource-group $RG_NAME \
-    --docker-custom-image-name nginx-demo:1.0 --docker-registry-server-url <private-repo-url> --docker-registry-server-user <username> --docker-registry-server-password <password>
+    --docker-custom-image-name nginx-demo:1.0 \
+    --docker-registry-server-url "https://$ACR_NAME.azurecr.io" \
+    --docker-registry-server-user $ACR_USERNAME \
+    --docker-registry-server-password $ACR_PASSWORD
+```
+
+Give it a moment so that Azure can refresh the image and navigate to the same address, you should see an nginx demo page.
+
+### Destroy the Infrastructure
+
+This step is **IMPORTANT**, so that you will avoid unnecessary charges. Let's remove the resources, it is very easy to do this with terraform.
+
+```bash
+# Navigate to folder with demo app
+cd ../terraform
+
+# Destroy all resources, confirm with yes
+terraform destroy
 ```
 
 ## Conclusion
+
+Azure PaaS, App Service is a very versatile and powerfully service. We have learned when to use it, how to select right SKU, finally how to deploy a sample workload following **infrastructure as code** practices.
+
