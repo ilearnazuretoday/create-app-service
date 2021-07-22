@@ -29,7 +29,7 @@ resource "azurerm_app_service" "main" {
   site_config {
     always_on        = true
     app_command_line = ""
-    linux_fx_version = "DOCKER|appsvcsample/python-helloworld:latest" # will be overwritten once image is pushed
+    linux_fx_version = "DOCKER|piotrzan/blazorindocker:latest"
 
     cors {
       allowed_origins = ["*"]

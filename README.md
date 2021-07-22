@@ -44,7 +44,7 @@ Since there is no good graphical representation helping us choose between SKUs (
 
 This demo is a sample html page served from nginx server running in a docker container.
 
-## Infrastructure
+### Infrastructure
 
 To setup our testing infrastructure, we will take advantage of the fact that Azure Cloud Shell comes with pre-installed terraform.
 
@@ -67,24 +67,48 @@ terraform plan
 terraform apply
 ```
 
-The above commands should create our Azure infrastructure and. Go ahead and copy the URL from terraform output and you should see a default "hello-world" container.
+The above commands should create our Azure infrastructure and. Go ahead and copy the URL from terraform output and you should see a [sample PWA web page](https://hub.docker.com/repository/docker/piotrzan/blazorindocker) form my Docker Hub registry
 
 ![terraform output](media/terraform-output.png)
 
-Now, let's retrieve login details to our
+### Deploying an app
+
+From here we have various options to play around with deploying a sample html page from the nginx-demo folder, replacing the app service container with antoher one, setting up CI/CD pipeline etc. If you are interested, follow along with the instructions.
+
+#### Retrieve login details to our Azure Container Registry so we can push an image with the sample web app
 
 ```bash
-# Login to Azure
-az login
+# Capture resource group name output from terraform into a variable
+export RG_NAME=$(terraform output --raw resource_group)
 
-# Login to container registry
-az acr login --name acrlearningazure
+# Capture ACR name output from terraform into a variable
+export ACR_NAME=$(terraform output --raw acr_name)
 
-# Build image locally
-docker build -t acrlearningazure.azurecr.io/nginx-demo:1.0 .
+Capture app service name into a variable
+export APP_NAME=$(terraform output --raw app_service_name)
 
-# Finally push image to registry
-docker push acrlearningazure.azurecr.io/nginx-demo:1.0
+# Obtain user name for our ACR
+export ACR_USERNAME=$(az acr credential show --resource-group $RG_NAME_ --name $ACR_NAME --query username)
+
+# Obtain password for our ACR
+export ACR_USERNAME=$(az acr credential show --resource-group $RG_NAME_ --name $ACR_NAME --query passwords[0].value)
+```
+
+#### Build image locally form Azure Cloud shell
+
+```bash
+# Navigate to folder with demo app
+cd ../nginx-demo
+
+# Use az cli to build and upload container to ACR
+az acr build --image nginx-demo:1.0 \
+    --registry $ACR_NAME \
+    --file Dockerfile .
+```
+
+### Set newly pushed image for our App Service
+
+az webapp config container set --name <app-name> --resource-group <group-name> --docker-custom-image-name <image-name> --docker-registry-server-url <private-repo-url> --docker-registry-server-user <username> --docker-registry-server-password <password>
 ```
 
 Remember to retag image with new version. For now this will be manual process.
