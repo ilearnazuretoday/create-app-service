@@ -50,8 +50,6 @@ To setup our testing infrastructure, we will take advantage of the fact that Azu
 
 You don't need to be familiar with terraform, all commands will be provided, but remember **always check scripts from internet before executing**. All scripts are part of the learning repository [here](https://github.com/ilearnazuretoday/create-app-service/tree/main/terraform)
 
-### Setup docker container
-
 ```bash
 # Clone the exercise repository
 git clone https://github.com/ilearnazuretoday/create-app-service
@@ -67,10 +65,13 @@ terraform plan
 
 # Create infrastructure, confirm with "yes"
 terraform apply
-
-# Finally push image to registry
-docker push acrlearningazure.azurecr.io/nginx-demo:1.0
 ```
+
+The above commands should create our Azure infrastructure and. Go ahead and copy the URL from terraform output and you should see a default "hello-world" container.
+
+![terraform output](media/terraform-output.png)
+
+Now, let's retrieve login details to our
 
 ```bash
 # Login to Azure
